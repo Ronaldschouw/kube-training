@@ -1,0 +1,7 @@
+ingress-nginx:
+  controller:
+    ingressClassResource:
+      default: true
+
+    service:
+      type: LoadBalancer

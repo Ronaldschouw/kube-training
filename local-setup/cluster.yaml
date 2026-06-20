@@ -1,0 +1,60 @@
+# k3d configuration file
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+metadata:
+  name: local-edge-cluster
+
+# Master Settings
+servers: 1
+agents: 3
+kubeAPI:
+  host: edge-cluster.localhost
+  hostIP: "127.0.0.1"
+  hostPort: "6443"
+
+# Network Settings
+subnet: "10.250.0.0/16"
+ports:
+  # Ingress
+  - port: 8080:80
+    nodeFilters:
+      - loadbalancer
+
+  - port: 8443:443
+    nodeFilters:
+      - loadbalancer
+
+# Registry Settings
+registries:
+  create:
+    name: edge-registry.localhost
+    host: "0.0.0.0"
+    hostPort: "5000"
+
+# K3d Options
+options:
+  k3d:
+    wait: true
+
+  k3s:
+    nodeLabels:
+      - label: "k3s-server=true"
+        nodeFilters:
+          - server:*
+      - label: "k3s-agent=true"
+        nodeFilters:
+          - agent:*
+
+    extraArgs:
+      - arg: --service-cidr=10.248.0.0/16
+        nodeFilters:
+          - server:*
+      - arg: --cluster-cidr=10.249.0.0/16
+        nodeFilters:
+          - server:*
+      - arg: --node-taint=k3s-controlplane=true:NoSchedule
+        nodeFilters:
+          - server:*
+      - arg: --disable=traefik
+        nodeFilters:
+          - server:*

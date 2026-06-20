@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: applications
+  namespace: argocd
+spec:
+  project: kube-training
+  source:
+    directory:
+      jsonnet: {}
+      recurse: true
+  source:
+    repoURL: https://github.com/dhlparcel/kube-training
+    targetRevision: HEAD 
+    path: local-setup/applications
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated: {}

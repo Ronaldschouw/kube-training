@@ -1,0 +1,15 @@
+.idea
+.vscode
+helpers/
+
+
+# Ignore ArgoCD GIT PAT Token
+local-setup/argocd/files/.token
+
+# Ignore downloaded Helm Charts
+local-setup/argocd/charts
+local-setup/ingress-nginx/charts
+
+# Ignore Chart Lockfiles
+**/Chart.lock
+
